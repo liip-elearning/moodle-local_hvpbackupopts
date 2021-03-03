@@ -42,9 +42,18 @@ class hvpbackupopts_form extends moodleform {
 
         $mform->addElement('html', '<p>'.get_string('pluginname_help', 'local_hvpbackupopts').'</p>');
 
+        $backuphvplibsislocked = isset($CFG->config_php_settings['mod_hvp_backup_libraries']);
+
         // Options.
-        $mform->addElement('checkbox', 'backuphvplibs', '', get_string('backuphvplibs', 'local_hvpbackupopts'));
+        if ($backuphvplibsislocked) {
+            $mform->addElement('html', '<div class="alert alert-info">' . get_string('configoverride', 'admin'));
+        }
+        $backuphvplibs = $mform->addElement('checkbox', 'backuphvplibs', '', get_string('backuphvplibs', 'local_hvpbackupopts'));
         $mform->setDefault('backuphvplibs', $this->_customdata['backuphvplibs']);
+        if ($backuphvplibsislocked) {
+            $mform->addElement('html', '</div>');
+            $backuphvplibs->freeze();
+        }
 
         // Buttons.
         $buttonarray = array();
